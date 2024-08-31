@@ -68,7 +68,7 @@ const CardWrapper = styled.div`
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const { dashboardData, todayWorkoutData, extra } = useSelector(
+  const { dashboardData, todayWorkoutData, extra, error } = useSelector(
     (state) => state.user
   );
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -81,6 +81,11 @@ const Dashboard = () => {
       getTodaysWorkout();
     }
   }, [extra]);
+  useEffect(() => {
+    if (error === "todayWorkoutData") {
+      setButtonLoading(false);
+    }
+  }, [error]);
   useEffect(() => {
     getDashboardData();
     getTodaysWorkout();
@@ -149,10 +154,11 @@ const Dashboard = () => {
         <Section>
           <Title>Todays Workouts</Title>
           <CardWrapper>
+            {console.log({ todayWorkoutData })}
             {todayWorkoutData?.todaysWorkouts?.length > 0 ? (
-              todayWorkoutData?.todaysWorkouts.map((workout) => (
+              todayWorkoutData?.todaysWorkouts.map((excercise) => (
                 <WorkoutCard
-                  workout={workout}
+                  workout={excercise}
                   getTodaysWorkout={getTodaysWorkout}
                 />
               ))

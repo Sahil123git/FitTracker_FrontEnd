@@ -14,7 +14,6 @@ const style = {
   borderRadius: "14px",
   boxShadow: 24,
 };
-
 const EditModal = ({ open, setOpen, workout }) => {
   const { loading, extra } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -32,7 +31,7 @@ const EditModal = ({ open, setOpen, workout }) => {
     dispatch(
       fetchData({
         keyName: "todayWorkoutData",
-        data: workout,
+        data: formData,
         url: todayWorkoutApi,
         method: "put",
         toastSuccess: true,

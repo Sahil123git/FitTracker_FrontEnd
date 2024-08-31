@@ -110,13 +110,14 @@ const WorkoutCard = ({ workout, getTodaysWorkout }) => {
           {workout?.duration} min
         </Details>
       </Flex>
-
-      <EditModal
-        open={open}
-        setOpen={setOpen}
-        workout={workout}
-        getTodaysWorkout={getTodaysWorkout}
-      />
+      {open && (
+        <EditModal
+          open={open}
+          setOpen={setOpen}
+          workout={workout}
+          getTodaysWorkout={getTodaysWorkout}
+        />
+      )}
     </Card>
   );
 };
