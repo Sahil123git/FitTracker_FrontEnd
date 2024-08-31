@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import TextInput from "../../components/TextInput";
 import Button from "../../components/Button";
-import { UserSignUp } from "../../api";
-import { toast } from "sonner";
+import { signUpApi } from "../../apiPath";
+import { fetchData } from "../../redux/reducers/userSlice";
 const Container = styled.div`
   width: 100%;
   max-width: 500px;
@@ -41,16 +41,14 @@ const TextButton = styled.span`
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const { currentUser, loading } = useSelector((state) => state.user);
   useEffect(() => {
-    if (localStorage.getItem("fittrack-app-token")) {
-      console.log("authorized");
-      // navigate("/app/dashboard");
+    if (currentUser && localStorage.getItem("fittrack-app-token")) {
+      navigate("/app/dashboard");
     }
   }, [currentUser]);
 
@@ -61,33 +59,47 @@ const SignUp = () => {
     }
     return true;
   };
-
-  const handelSignUp = async () => {
-    setLoading(true);
-    setButtonDisabled(true);
+  const handleSignUp = async () => {
     if (validateInputs()) {
-      await UserSignUp({ name, email, password })
-        .then((res) => {
-          localStorage.setItem("fittrack-app-token", res.data.token);
-          setLoading(false);
-          setButtonDisabled(false);
-          toast.success("Success", {
-            className: "my-classname",
-            description: res.response.data.message,
-            duration: 5000,
-          });
+      const data = { name, email, password };
+      dispatch(
+        fetchData({
+          keyName: "currentUser",
+          url: signUpApi,
+          method: "post",
+          data,
+          toastSuccess: true,
+          toastError: true,
         })
-        .catch((err) => {
-          toast.error("Error", {
-            className: "my-classname",
-            description: err.response.data.message,
-            duration: 5000,
-          });
-          setLoading(false);
-          setButtonDisabled(false);
-        });
+      );
     }
   };
+  // const handelSignUp = async () => {
+  //   setLoading(true);
+  //   setButtonDisabled(true);
+  //   if (validateInputs()) {
+  //     await UserSignUp({ name, email, password })
+  //       .then((res) => {
+  //         // localStorage.setItem("fittrack-app-token", res.data.token);
+  //         setLoading(false);
+  //         setButtonDisabled(false);
+  //         toast.success("Success", {
+  //           className: "my-classname",
+  //           description: res.response.data.message,
+  //           duration: 5000,
+  //         });
+  //       })
+  //       .catch((err) => {
+  //         toast.error("Error", {
+  //           className: "my-classname",
+  //           description: err.response.data.message,
+  //           duration: 5000,
+  //         });
+  //         setLoading(false);
+  //         setButtonDisabled(false);
+  //       });
+  //   }
+  // };
   return (
     <>
       <Container>
@@ -123,9 +135,9 @@ const SignUp = () => {
           />
           <Button
             text="SignUp"
-            onClick={handelSignUp}
+            onClick={handleSignUp}
             isLoading={loading}
-            isDisabled={buttonDisabled}
+            isDisabled={loading}
           />
         </div>
       </Container>

@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { toast } from "sonner";
 import TextInput from "../../components/TextInput";
 import Button from "../../components/Button";
-import { UserSignIn } from "../../api";
 import { fetchData } from "../../redux/reducers/userSlice";
 import { signInApi } from "../../apiPath";
 import { useDispatch, useSelector } from "react-redux";
@@ -43,16 +41,11 @@ const TextButton = styled.span`
 const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, loading } = useSelector((state) => state.user);
   useEffect(() => {
-    console.log({ currentUser });
     if (currentUser && localStorage.getItem("fittrack-app-token")) {
-      setLoading(false);
-      setButtonDisabled(false);
       navigate("/app/dashboard");
     }
   }, [currentUser]);
@@ -75,36 +68,11 @@ const SignIn = () => {
     }
     return true;
   };
-
   const handelSignIn = async () => {
-    setLoading(true);
-    setButtonDisabled(true);
     if (validateInputs()) {
       loginUser({ email, password });
-      // await UserSignIn({ email, password })
-      //   .then((res) => {
-      //     localStorage.setItem("fittrack-app-token", res.data.token);
-      //     setLoading(false);
-      //     setButtonDisabled(false);
-      //     navigate("/app/dashboard");
-      //     toast.success("Success", {
-      //       className: "my-classname",
-      //       description: res.data.message,
-      //       duration: 1000,
-      //     });
-      //   })
-      //   .catch((err) => {
-      //     toast.error("Error", {
-      //       className: "my-classname",
-      //       description: err.response.data.message,
-      //       duration: 3000,
-      //     });
-      //     setLoading(false);
-      //     setButtonDisabled(false);
-      //   });
     }
   };
-
   return (
     <>
       <Container>
@@ -136,7 +104,7 @@ const SignIn = () => {
             text="SignIn"
             onClick={handelSignIn}
             isLoading={loading}
-            isDisabled={buttonDisabled}
+            isDisabled={loading}
           />
         </div>
       </Container>

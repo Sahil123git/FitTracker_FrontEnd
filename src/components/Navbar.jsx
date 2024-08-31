@@ -100,17 +100,6 @@ const UserContainer = styled.div`
   padding: 0 6px;
   color: ${({ theme }) => theme.primary};
 `;
-const TextButton = styled.div`
-  text-align: end;
-  color: ${({ theme }) => theme.secondary};
-  cursor: pointer;
-  font-size: 16px;
-  transition: all 0.3s ease;
-  font-weight: 600;
-  &:hover {
-    color: ${({ theme }) => theme.primary};
-  }
-`;
 
 const MobileMenu = styled.ul`
   display: flex;
@@ -134,7 +123,7 @@ const MobileMenu = styled.ul`
   z-index: ${({ isOpen }) => (isOpen ? "1000" : "-1000")};
 `;
 
-const Navbar = ({ currentUser }) => {
+const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -157,15 +146,14 @@ const Navbar = ({ currentUser }) => {
         <Mobileicon onClick={() => setisOpen(!isOpen)}>
           <MenuRounded sx={{ color: "inherit" }} />
         </Mobileicon>
-        <NavLogo to="/">
+        <NavLogo to="/app/dashboard">
           <Logo src={LogoImg} />
           Fittrack
         </NavLogo>
 
         <MobileMenu isOpen={isOpen}>
-          <Navlink to="/">Dashboard</Navlink>
-          <Navlink to="/workouts">Workouts</Navlink>
-          <Navlink to="/tutorials">Tutorials</Navlink>
+          <Navlink to="dashboard">Dashboard</Navlink>
+          <Navlink to="workouts">Workouts</Navlink>
         </MobileMenu>
 
         <NavItems>

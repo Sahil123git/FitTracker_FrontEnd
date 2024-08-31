@@ -1,7 +1,9 @@
-import { Outlet } from "react-router-dom";
+import { useEffect, useLayoutEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import LogoImage from "../utils/Images/Logo.png";
 import AuthImage from "../utils/Images/AuthImage.jpg";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   flex: 1;
@@ -45,6 +47,14 @@ const Right = styled.div`
 `;
 
 const AuthLayout = () => {
+  const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (localStorage.getItem("fittrack-app-token")) {
+      navigate("/app");
+    }
+  }, [navigate]);
   return (
     <Container>
       <Left>

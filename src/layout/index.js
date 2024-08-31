@@ -8,6 +8,10 @@ import Workouts from "../pages/Workouts";
 import CustomToast from "../components/CustomToast";
 import AppLayout from "./AppLayout";
 import AuthLayout from "./AuthLayout";
+import { useSelector } from "react-redux";
+import { useGetUser } from "../hooks";
+import { useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 const Container = styled.div`
   width: 100%;
   height: 100vh;
@@ -21,6 +25,16 @@ const Container = styled.div`
 `;
 
 const Layout = () => {
+  const { currentUser } = useSelector((state) => state.user);
+  const getUser = useGetUser();
+  useEffect(() => {
+    if (localStorage.getItem("fittrack-app-token")) {
+      if (currentUser === null) {
+        const decoded = jwtDecode(localStorage.getItem("fittrack-app-token"));
+        getUser(decoded.id);
+      }
+    }
+  }, [currentUser]);
   return (
     <ThemeProvider theme={lightTheme}>
       <BrowserRouter>

@@ -116,7 +116,7 @@ const Dashboard = () => {
         data: { workout },
         url: todayWorkoutApi,
         method: "post",
-        toastSuccess: false,
+        toastSuccess: true,
         toastError: true,
       })
     );

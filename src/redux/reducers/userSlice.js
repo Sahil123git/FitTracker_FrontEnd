@@ -2,21 +2,22 @@ import axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { apiPath } from "../../apiPath";
 import { toast } from "sonner";
-const token = localStorage.getItem("fittrack-app-token");
-axios.defaults.headers.common["Authorization"] = token;
 const initialState = {
   loading: false,
   currentUser: null,
   dashboardData: null,
   todayWorkoutData: null,
   extra: null,
+  error: null,
 };
 export const fetchData = createAsyncThunk(
   "fetchData",
-  async ({ keyName, url, method, data }) => {
+  async ({ keyName, url, method, data }, { rejectWithValue }) => {
     try {
-      console.log(token);
+      const token = localStorage.getItem("fittrack-app-token");
+      axios.defaults.headers.common["Authorization"] = token;
       const response = await axios[method](`${apiPath}/${url}`, data && data);
+      // console.log({ token });
       if (method === "get" || keyName === "currentUser") {
         return { data: response.data, keyName, method };
       } else {
@@ -27,7 +28,9 @@ export const fetchData = createAsyncThunk(
         };
       }
     } catch (err) {
-      throw err;
+      console.log({ axios: err });
+      // throw err.response;
+      return rejectWithValue(err.response.data);
     }
   }
 );
@@ -48,11 +51,19 @@ export const userSlice = createSlice({
     builder
       .addCase(fetchData.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(fetchData.fulfilled, (state, action) => {
         state.loading = false;
+        state.error = null;
         const { keyName, data, method } = action.payload;
-        if (method === "get" || keyName === "currentUser") {
+        if (keyName === "currentUser") {
+          state.extra = null;
+          state[keyName] = data;
+          console.log("inside here current user: ", { token: data.token });
+          if (method === "post")
+            localStorage.setItem("fittrack-app-token", data.token);
+        } else if (method === "get") {
           state.extra = null;
           state[keyName] = data;
         } else {
@@ -66,6 +77,12 @@ export const userSlice = createSlice({
       })
       .addCase(fetchData.rejected, (state, action) => {
         console.log({ action });
+        toast.error("Error", {
+          className: "my-classname",
+          description: action.payload.message,
+          duration: 1000,
+        });
+        state.error = action.meta.arg.keyName;
         state.loading = false;
       });
   },

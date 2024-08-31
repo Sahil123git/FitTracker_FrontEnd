@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import AddWorkout from "../AddWorkout";
-import { editWorkout } from "../../api";
+import { fetchData } from "../../redux/reducers/userSlice";
+import { todayWorkoutApi } from "../../apiPath";
 const style = {
   position: "absolute",
   top: "50%",
@@ -13,25 +15,35 @@ const style = {
   boxShadow: 24,
 };
 
-const EditModal = ({ open, setOpen, workout, getTodaysWorkout }) => {
-  const [buttonLoading, setButtonLoading] = useState(false);
+const EditModal = ({ open, setOpen, workout }) => {
+  const { loading, extra } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState(workout);
-  const handleClose = () => setOpen(false);
-  const updateWorkout = async () => {
-    setButtonLoading(true);
-    const token = localStorage.getItem("fittrack-app-token");
-    await editWorkout(token, { ...formData, _id: workout._id })
-      .then((res) => {
-        getTodaysWorkout();
-        handleClose();
-        setButtonLoading(false);
-      })
-      .catch((err) => {
-        alert(err);
-      });
+  useEffect(() => {
+    if (extra?.keyName === "todayWorkoutData") {
+      handleClose();
+    }
+  }, [extra]);
+  const handleClose = () => {
+    setOpen(false);
+    setFormData(workout);
   };
-  const handleChange = (type, value) =>
-    setFormData({ ...workout, [type]: value });
+  const updateWorkout = async () => {
+    dispatch(
+      fetchData({
+        keyName: "todayWorkoutData",
+        data: workout,
+        url: todayWorkoutApi,
+        method: "put",
+        toastSuccess: true,
+        toastError: true,
+      })
+    );
+  };
+  const handleChange = (type, value) => {
+    setFormData({ ...formData, [type]: value });
+  };
+
   return (
     <Modal
       open={open}
@@ -44,7 +56,7 @@ const EditModal = ({ open, setOpen, workout, getTodaysWorkout }) => {
           workout={formData}
           handleChange={handleChange}
           addNewWorkout={updateWorkout}
-          buttonLoading={buttonLoading}
+          buttonLoading={loading}
           isEdit={true}
         />
       </Box>

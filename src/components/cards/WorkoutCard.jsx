@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { toast } from "sonner";
+import styled from "styled-components";
+import { useDispatch } from "react-redux";
 import { FitnessCenterRounded, TimelapseRounded } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteTwoToneIcon from "@mui/icons-material/DeleteTwoTone";
 import Box from "@mui/material/Box";
-import styled from "styled-components";
+import { fetchData } from "../../redux/reducers/userSlice";
+import { todayWorkoutApi } from "../../apiPath";
 import EditModal from "../modals/EditModal";
-import { workoutDelete } from "../../api";
 const Card = styled.div`
   flex: 1;
   min-width: 250px;
@@ -58,24 +59,18 @@ const Details = styled.div`
 `;
 const WorkoutCard = ({ workout, getTodaysWorkout }) => {
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
   const deleteWorkout = async () => {
-    const token = localStorage.getItem("fittrack-app-token");
-    await workoutDelete(token, workout._id)
-      .then((res) => {
-        toast.success("Success", {
-          className: "my-classname",
-          description: res.data.message,
-          duration: 1000,
-        });
+    dispatch(
+      fetchData({
+        keyName: "todayWorkoutData",
+        data: null,
+        url: `${todayWorkoutApi}/${workout._id}`,
+        method: "delete",
+        toastSuccess: true,
+        toastError: true,
       })
-      .catch((err) => {
-        toast.message("Success", {
-          className: "my-classname",
-          description: err.message,
-          duration: 1000,
-        });
-      });
-    getTodaysWorkout();
+    );
   };
   return (
     <Card>
@@ -115,14 +110,13 @@ const WorkoutCard = ({ workout, getTodaysWorkout }) => {
           {workout?.duration} min
         </Details>
       </Flex>
-      {open && (
-        <EditModal
-          open={open}
-          setOpen={setOpen}
-          workout={workout}
-          getTodaysWorkout={getTodaysWorkout}
-        />
-      )}
+
+      <EditModal
+        open={open}
+        setOpen={setOpen}
+        workout={workout}
+        getTodaysWorkout={getTodaysWorkout}
+      />
     </Card>
   );
 };
