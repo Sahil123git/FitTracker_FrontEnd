@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link as LinkR, NavLink, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { MenuRounded } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
@@ -128,6 +128,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [isOpen, setisOpen] = useState(false);
+  const { currentUser } = useSelector((state) => state.user);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -171,7 +172,9 @@ const Navbar = () => {
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
             >
-              <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+              <Avatar sx={{ width: 32, height: 32 }}>
+                {currentUser?.name?.[0].toUpperCase()}
+              </Avatar>
             </IconButton>
           </Tooltip>
           <Menu
@@ -212,7 +215,7 @@ const Navbar = () => {
             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           >
             <MenuItem onClick={handleClose}>
-              <Avatar /> Profile
+              <Avatar /> {currentUser?.name}
             </MenuItem>
             <Divider />
             <MenuItem onClick={handleLogout}>

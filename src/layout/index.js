@@ -29,7 +29,7 @@ const Layout = () => {
   const getUser = useGetUser();
   useEffect(() => {
     if (localStorage.getItem("fittrack-app-token")) {
-      if (currentUser === null) {
+      if (currentUser === null || currentUser === "authProcess") {
         const decoded = jwtDecode(localStorage.getItem("fittrack-app-token"));
         getUser(decoded.id);
       }

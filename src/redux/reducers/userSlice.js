@@ -59,10 +59,12 @@ export const userSlice = createSlice({
         const { keyName, data, method } = action.payload;
         if (keyName === "currentUser") {
           state.extra = null;
-          state[keyName] = data;
-          console.log("inside here current user: ", { token: data.token });
-          if (method === "post")
+          if (method === "post") {
             localStorage.setItem("fittrack-app-token", data.token);
+            state[keyName] = "authProcess";
+          } else {
+            state[keyName] = data.data;
+          }
         } else if (method === "get") {
           state.extra = null;
           state[keyName] = data;

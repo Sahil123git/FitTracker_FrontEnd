@@ -47,7 +47,7 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const { currentUser, loading } = useSelector((state) => state.user);
   useEffect(() => {
-    if (currentUser && localStorage.getItem("fittrack-app-token")) {
+    if (localStorage.getItem("fittrack-app-token")) {
       navigate("/app/dashboard");
     }
   }, [currentUser]);

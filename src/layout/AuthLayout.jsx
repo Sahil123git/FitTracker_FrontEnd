@@ -52,9 +52,9 @@ const AuthLayout = () => {
 
   useEffect(() => {
     if (localStorage.getItem("fittrack-app-token")) {
-      navigate("/app");
+      navigate("/app/dashboard");
     }
-  }, [navigate]);
+  }, [navigate, currentUser]);
   return (
     <Container>
       <Left>
