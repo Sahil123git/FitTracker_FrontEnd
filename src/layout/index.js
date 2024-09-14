@@ -25,16 +25,16 @@ const Container = styled.div`
 `;
 
 const Layout = () => {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, extra } = useSelector((state) => state.user);
   const getUser = useGetUser();
   useEffect(() => {
     if (localStorage.getItem("fittrack-app-token")) {
-      if (currentUser === null || currentUser === "authProcess") {
+      if (currentUser === null || extra?.keyName === "currentUser") {
         const decoded = jwtDecode(localStorage.getItem("fittrack-app-token"));
         getUser(decoded.id);
       }
     }
-  }, [currentUser]);
+  }, [currentUser, extra]);
   return (
     <ThemeProvider theme={lightTheme}>
       <BrowserRouter>

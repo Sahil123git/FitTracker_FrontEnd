@@ -61,7 +61,12 @@ export const userSlice = createSlice({
           state.extra = null;
           if (method === "post") {
             localStorage.setItem("fittrack-app-token", data.token);
-            state[keyName] = "authProcess";
+            state.extra = { keyName: "currentUser" };
+            toast.success("Success", {
+              className: "my-classname",
+              description: data.message,
+              duration: 1000,
+            });
           } else {
             state[keyName] = data.data;
           }

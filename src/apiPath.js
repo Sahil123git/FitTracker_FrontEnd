@@ -9,3 +9,4 @@ export const signInApi = "auth/signin";
 export const dashboardApi = "dashboard";
 export const todayWorkoutApi = "workout";
 export const userApi = "user";
+export const uploadApi = "upload";
