@@ -3,6 +3,7 @@ import { Link as LinkR, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { MenuRounded } from "@mui/icons-material";
+import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
@@ -12,6 +13,7 @@ import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
 import Logout from "@mui/icons-material/Logout";
 import LogoImg from "../utils/Images/Logo.png";
+import ProfileDrawer from "../components/drawers/ProfileDrawer";
 import { logout } from "../redux/reducers/userSlice";
 
 const Nav = styled.div`
@@ -59,7 +61,6 @@ const Mobileicon = styled.div`
     align-items: center;
   }
 `;
-
 const NavItems = styled.ul`
   width: 100%;
   display: flex;
@@ -89,7 +90,6 @@ const Navlink = styled(NavLink)`
     border-bottom: 1.8px solid ${({ theme }) => theme.primary};
   }
 `;
-
 const UserContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -100,7 +100,6 @@ const UserContainer = styled.div`
   padding: 0 6px;
   color: ${({ theme }) => theme.primary};
 `;
-
 const MobileMenu = styled.ul`
   display: flex;
   flex-direction: column;
@@ -128,6 +127,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [isOpen, setisOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -141,6 +141,10 @@ const Navbar = () => {
     navigate("/");
     setAnchorEl(null);
   };
+  const toggleDrawer = () => {
+    setDrawerOpen((prev) => !prev);
+  };
+
   return (
     <Nav>
       <NavContainer>
@@ -214,7 +218,7 @@ const Navbar = () => {
             transformOrigin={{ horizontal: "right", vertical: "top" }}
             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           >
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={() => toggleDrawer(true)}>
               <Avatar /> {currentUser?.name}
             </MenuItem>
             <Divider />
@@ -226,6 +230,14 @@ const Navbar = () => {
             </MenuItem>
           </Menu>
         </UserContainer>
+
+        <Drawer
+          anchor="right"
+          open={drawerOpen}
+          onClose={() => toggleDrawer(false)}
+        >
+          <ProfileDrawer toggleDrawer={toggleDrawer} />
+        </Drawer>
       </NavContainer>
     </Nav>
   );

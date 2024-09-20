@@ -154,7 +154,6 @@ const Dashboard = () => {
         <Section>
           <Title>Todays Workouts</Title>
           <CardWrapper>
-            {console.log({ todayWorkoutData })}
             {todayWorkoutData?.todaysWorkouts?.length > 0 ? (
               todayWorkoutData?.todaysWorkouts.map((excercise) => (
                 <WorkoutCard
