@@ -19,7 +19,11 @@ export const fetchData = createAsyncThunk(
       axios.defaults.headers.common["Authorization"] = token;
       const response = await axios[method](`${apiPath}/${url}`, data && data);
       // console.log({ token });
-      if (method === "get" || keyName === "currentUser") {
+      if (
+        method === "get" ||
+        keyName === "currentUser" ||
+        keyName === "resourceData"
+      ) {
         return { data: response.data, keyName, method };
       } else {
         return {
@@ -69,6 +73,7 @@ export const userSlice = createSlice({
               duration: 1000,
             });
           } else {
+            console.log({ data });
             state[keyName] = data.data;
           }
         } else if (method === "get") {

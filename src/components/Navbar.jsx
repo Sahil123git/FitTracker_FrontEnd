@@ -176,9 +176,11 @@ const Navbar = () => {
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
             >
-              <Avatar sx={{ width: 32, height: 32 }}>
-                {currentUser?.name?.[0].toUpperCase()}
-              </Avatar>
+              <Avatar
+                sx={{ width: 32, height: 32 }}
+                alt={currentUser?.name}
+                src={currentUser?.img}
+              />
             </IconButton>
           </Tooltip>
           <Menu

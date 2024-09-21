@@ -1,16 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { Box, Button } from "@mui/material";
-import { fetchData } from "../../redux/reducers/userSlice";
+import { fetchData, updateStoreData } from "../../redux/reducers/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { uploadApi } from "../../apiPath";
+import { uploadApi, userApi } from "../../apiPath";
+import CircularProgress from "@mui/material/CircularProgress";
 import Fab from "@mui/material/Fab";
+import Backdrop from "@mui/material/Backdrop";
 import ClearIcon from "@mui/icons-material/Clear";
 
 const UploadDrawer = ({ setResourceOpen }) => {
   const [file, setFile] = useState(null);
   const [fileUrl, setFileUrl] = useState("");
   const dispatch = useDispatch();
-  const { loading, extra, resourceData } = useSelector((state) => state.user);
+  const { loading, currentUser, resourceData } = useSelector(
+    (state) => state.user
+  );
   //   const [formData, setFormData] = useState(workout);
   const inputRef = useRef(null);
   function handleChange(e) {
@@ -18,10 +22,26 @@ const UploadDrawer = ({ setResourceOpen }) => {
     setFile(e.target?.files?.[0]);
   }
   useEffect(() => {
-    if (extra?.keyName === "resourceData") {
+    return () => {
+      dispatch(updateStoreData({ payload: null, meta: "resourceData" }));
+    };
+  }, []);
+  useEffect(() => {
+    if (resourceData !== null) {
       setResourceOpen(false);
+      const data = { ...currentUser, img: resourceData.imageUrl };
+      dispatch(
+        fetchData({
+          keyName: "currentUser",
+          data: data,
+          url: `${userApi}/${currentUser._id}`,
+          method: "put",
+          toastSuccess: true,
+          toastError: true,
+        })
+      );
     }
-  }, [extra]);
+  }, [resourceData]);
   const uploadImage = () => {
     const formData = new FormData();
     formData.append("resource", file);
@@ -46,6 +66,14 @@ const UploadDrawer = ({ setResourceOpen }) => {
         justifyContent: "center",
       }}
     >
+      {loading && (
+        <Backdrop
+          sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
+          open={loading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <div>
         <Fab
           sx={{

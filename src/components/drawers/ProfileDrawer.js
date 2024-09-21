@@ -40,10 +40,10 @@ const ProfileDrawer = ({ toggleDrawer }) => {
         }}
       >
         <Avatar
-          alt={currentUser.name}
-          src="/static/images/avatar/1.jpg"
+          alt={currentUser?.name}
+          src={currentUser?.img}
           sx={{ width: 135, height: 135 }}
-        ></Avatar>
+        />
         <Fab
           color="primary"
           aria-label="edit"
