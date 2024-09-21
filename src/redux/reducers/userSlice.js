@@ -7,6 +7,7 @@ const initialState = {
   currentUser: null,
   dashboardData: null,
   todayWorkoutData: null,
+  resourceData: null,
   extra: null,
   error: null,
 };

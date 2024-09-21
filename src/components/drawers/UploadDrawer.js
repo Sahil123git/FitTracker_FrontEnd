@@ -1,21 +1,27 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Box, Button } from "@mui/material";
 import { fetchData } from "../../redux/reducers/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { uploadApi } from "../../apiPath";
 import Fab from "@mui/material/Fab";
 import ClearIcon from "@mui/icons-material/Clear";
 
 const UploadDrawer = ({ setResourceOpen }) => {
   const [file, setFile] = useState(null);
+  const [fileUrl, setFileUrl] = useState("");
   const dispatch = useDispatch();
+  const { loading, extra, resourceData } = useSelector((state) => state.user);
   //   const [formData, setFormData] = useState(workout);
   const inputRef = useRef(null);
   function handleChange(e) {
-    console.log(e.target.files);
-    console.log("getting called");
-    setFile(URL.createObjectURL(e.target?.files?.[0]));
+    setFileUrl(URL.createObjectURL(e.target?.files?.[0]));
+    setFile(e.target?.files?.[0]);
   }
+  useEffect(() => {
+    if (extra?.keyName === "resourceData") {
+      setResourceOpen(false);
+    }
+  }, [extra]);
   const uploadImage = () => {
     const formData = new FormData();
     formData.append("resource", file);
@@ -33,7 +39,7 @@ const UploadDrawer = ({ setResourceOpen }) => {
   return (
     <Box
       sx={{
-        minWidth: 350,
+        width: 350,
         height: "100%",
         display: "flex",
         alignItems: "center",
@@ -67,7 +73,7 @@ const UploadDrawer = ({ setResourceOpen }) => {
                 inputRef.current.click();
               }}
             >
-              Choose Image
+              Choose an Image
             </Button>
             <input
               ref={inputRef}
@@ -80,10 +86,10 @@ const UploadDrawer = ({ setResourceOpen }) => {
         )}
 
         <img
-          src={file}
+          src={fileUrl}
           style={{ maxWidth: "90%", display: "block", margin: "auto" }}
         />
-        {file && (
+        {fileUrl && (
           <div
             style={{
               display: "flex",
@@ -94,7 +100,13 @@ const UploadDrawer = ({ setResourceOpen }) => {
             <Button variant="contained" onClick={uploadImage}>
               Upload
             </Button>
-            <Button color="error" onClick={() => setFile(null)}>
+            <Button
+              color="error"
+              onClick={() => {
+                setFile(null);
+                setFileUrl("");
+              }}
+            >
               Reset
             </Button>
           </div>
