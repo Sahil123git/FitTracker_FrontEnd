@@ -73,7 +73,6 @@ export const userSlice = createSlice({
               duration: 1000,
             });
           } else {
-            console.log({ data });
             state[keyName] = data.data;
           }
         } else if (method === "get") {

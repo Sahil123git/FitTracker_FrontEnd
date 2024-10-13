@@ -15,7 +15,6 @@ const UploadDrawer = ({ setResourceOpen }) => {
   const { loading, currentUser, resourceData } = useSelector(
     (state) => state.user
   );
-  //   const [formData, setFormData] = useState(workout);
   const inputRef = useRef(null);
   function handleChange(e) {
     setFileUrl(URL.createObjectURL(e.target?.files?.[0]));

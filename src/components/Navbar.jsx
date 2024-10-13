@@ -159,11 +159,13 @@ const Navbar = () => {
         <MobileMenu isOpen={isOpen}>
           <Navlink to="dashboard">Dashboard</Navlink>
           <Navlink to="workouts">Workouts</Navlink>
+          <Navlink to="blogs">Blogs</Navlink>
         </MobileMenu>
 
         <NavItems>
           <Navlink to="dashboard">Dashboard</Navlink>
           <Navlink to="workouts">Workouts</Navlink>
+          <Navlink to="blogs">Blogs</Navlink>
         </NavItems>
 
         <UserContainer>

@@ -5,6 +5,7 @@ import SignUp from "../pages/auth/SignUp";
 import SignIn from "../pages/auth/SignIn";
 import Dashboard from "../pages/Dashboard";
 import Workouts from "../pages/Workouts";
+import Blogs from "../pages/blogs";
 import CustomToast from "../components/CustomToast";
 import AppLayout from "./AppLayout";
 import AuthLayout from "./AuthLayout";
@@ -48,6 +49,7 @@ const Layout = () => {
             <Route path="/app" element={<AppLayout />}>
               <Route path="workouts" element={<Workouts />} />
               <Route path="dashboard" element={<Dashboard />} />
+              <Route path="blogs" element={<Blogs />} />
               <Route index element={<Dashboard />} />
             </Route>
           </Routes>
