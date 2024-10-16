@@ -8,6 +8,7 @@ const initialState = {
   dashboardData: null,
   todayWorkoutData: null,
   resourceData: null,
+  blogsData: null,
   extra: null,
   error: null,
 };

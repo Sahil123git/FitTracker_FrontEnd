@@ -8,5 +8,6 @@ export const signUpApi = "auth/signup";
 export const signInApi = "auth/signin";
 export const dashboardApi = "dashboard";
 export const todayWorkoutApi = "workout";
+export const blogApi = "blogs";
 export const userApi = "user";
 export const uploadApi = "upload";

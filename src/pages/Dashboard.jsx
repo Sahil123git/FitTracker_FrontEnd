@@ -129,7 +129,7 @@ const Dashboard = () => {
 
   const handleChange = (type, value) =>
     setWorkout({ ...workout, [type]: value });
-
+  console.log({ dashboardData });
   return (
     <Container>
       <Wrapper>
