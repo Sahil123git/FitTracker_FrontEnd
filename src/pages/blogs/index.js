@@ -2,15 +2,16 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { blogApi } from "../../apiPath";
 import { fetchData } from "../../redux/reducers/userSlice";
-import { Box, Button, Typography, IconButton } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import ModalContent from "./ModalContent";
 
 const Blogs = () => {
   const dispatch = useDispatch();
   const { blogsData } = useSelector((state) => state.user);
+  const [open, setOpen] = useState(null);
   const [loading, setLoading] = useState(false);
-  console.log({ blog: blogsData?.data });
   const getTodaysWorkout = async () => {
     setLoading(true);
     dispatch(
@@ -24,6 +25,11 @@ const Blogs = () => {
     );
     setLoading(false);
   };
+  const openModal = (id) => {
+    console.log({ id });
+    setOpen(id);
+  };
+
   useEffect(() => {
     if (blogsData === null) getTodaysWorkout();
   }, []);
@@ -80,7 +86,6 @@ const Blogs = () => {
               </Typography>
             </Box>
 
-            {/* View Button */}
             <Button
               variant="contained"
               sx={{
@@ -90,12 +95,14 @@ const Blogs = () => {
                 padding: "5px 15px",
                 "&:hover": { backgroundColor: "#0056b3" },
               }}
+              onClick={() => openModal(ele._id)}
             >
               View
             </Button>
           </Box>
         </Box>
       ))}
+      <ModalContent open={open} setOpen={setOpen} />
     </Box>
   );
 };

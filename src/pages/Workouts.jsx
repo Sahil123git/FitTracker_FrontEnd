@@ -117,7 +117,7 @@ const Workouts = () => {
         </Left>
         <Right>
           <Section>
-            <SecTitle>Todays Workout</SecTitle>
+            <SecTitle>Today's Workout</SecTitle>
             {loading ? (
               <CircularProgress />
             ) : (
