@@ -10,17 +10,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* width */
 ::-webkit-scrollbar {
-  width: 2px;
-}
-/* Track */
-::-webkit-scrollbar-track {
+  width: 5px; /* Width of the scrollbar */
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 6px;
-  height: 50px;
+  background-color: #7cafe5; /* Scrollbar color */
+  border-radius: 6px; /* Rounded corners */
 }
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1); /* Track color */
+}
+
+/* For Firefox */

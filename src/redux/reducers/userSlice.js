@@ -9,6 +9,7 @@ const initialState = {
   todayWorkoutData: null,
   resourceData: null,
   blogsData: null,
+  blogData: null,
   extra: null,
   error: null,
 };
