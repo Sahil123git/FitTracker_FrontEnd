@@ -16,13 +16,13 @@ const BlogCard = ({ blog, openModal }) => {
       sx={{
         width: "100%",
         margin: "0 0 40px 0",
-        boxShadow: 3,
+        boxShadow: 2,
         borderRadius: 2,
         transition: "transform 0.3s",
         background: "#f4f4f4",
         "&:hover": {
-          transform: "scale(1.02)",
-          boxShadow: 6,
+          transform: "scale(1.01)",
+          boxShadow: 3,
           cursor: "pointer",
         },
       }}

@@ -173,10 +173,14 @@ const Navbar = () => {
             <IconButton
               onClick={handleClick}
               size="small"
-              sx={{ ml: 2 }}
               aria-controls={open ? "account-menu" : undefined}
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
+              sx={{
+                border: "2px solid #1470d2",
+                padding: "2px",
+                ml: 2,
+              }}
             >
               <Avatar
                 sx={{ width: 32, height: 32 }}
@@ -223,7 +227,12 @@ const Navbar = () => {
             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           >
             <MenuItem onClick={() => toggleDrawer(true)}>
-              <Avatar /> {currentUser?.name}
+              <Avatar
+                sx={{ width: 32, height: 32 }}
+                alt={currentUser?.name}
+                src={currentUser?.img}
+              />
+              {currentUser?.name}
             </MenuItem>
             <Divider />
             <MenuItem onClick={handleLogout}>
