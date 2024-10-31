@@ -23,11 +23,7 @@ const Blogs = () => {
     );
     setLoading(false);
   };
-  const openModal = (id) => {
-    console.log({ id });
-    setOpen(id);
-  };
-
+  const openModal = (id) => setOpen(id);
   useEffect(() => {
     if (blogsData === null) getTodaysWorkout();
   }, []);
@@ -51,10 +47,6 @@ const Blogs = () => {
           overflow: "auto",
         }}
       >
-        {blogsData?.data.length > 0 &&
-          blogsData?.data?.map((blog) => (
-            <BlogCard key={blog._id} blog={blog} openModal={openModal} />
-          ))}{" "}
         {blogsData?.data.length > 0 &&
           blogsData?.data?.map((blog) => (
             <BlogCard key={blog._id} blog={blog} openModal={openModal} />
