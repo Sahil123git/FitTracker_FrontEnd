@@ -23,6 +23,7 @@ import IconButton from "@mui/material/IconButton";
 import ClearIcon from "@mui/icons-material/Clear";
 import EditIcon from "@mui/icons-material/Edit";
 import UploadDrawer from "./UploadDrawer";
+import EditProfileDrawer from "./EditProfileDrawer";
 
 const getBMI = (weight, height) => {
   const heightInMeters = height * 0.3048; //conversion to meter
@@ -61,6 +62,7 @@ const getBMIFeedback = (bmi) => {
 const ProfileDrawer = ({ toggleDrawer }) => {
   const { currentUser } = useSelector((state) => state.user);
   const [resourceOpen, setResourceOpen] = useState(false);
+  const [profileDrawer, setProfileDrawer] = useState(false);
   const bmi = getBMI(currentUser.weight, currentUser.height);
   const { message, goal, type } = getBMIFeedback(bmi);
 
@@ -136,6 +138,7 @@ const ProfileDrawer = ({ toggleDrawer }) => {
               fontSize: "12px",
               minWidth: "52px",
             }}
+            onClick={() => setProfileDrawer(true)}
           >
             Edit
           </Button>
@@ -200,6 +203,16 @@ const ProfileDrawer = ({ toggleDrawer }) => {
           onClose={() => setResourceOpen(false)}
         >
           <UploadDrawer setResourceOpen={setResourceOpen} avatarUpload={true} />
+        </Drawer>
+        <Drawer
+          anchor="right"
+          open={profileDrawer}
+          onClose={() => setResourceOpen(false)}
+        >
+          <EditProfileDrawer
+            currentUser={currentUser}
+            setProfileDrawer={setProfileDrawer}
+          />
         </Drawer>
       </Box>
     </>
