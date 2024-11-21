@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -18,7 +18,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { userApi } from "../../apiPath";
 import { fetchData } from "../../redux/reducers/userSlice";
 
-function EditProfileDrawer({ currentUser, setProfileDrawer }) {
+function EditProfileDrawer({ currentUser, setProfileDrawer, extra }) {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     name: currentUser.name,
@@ -47,10 +47,14 @@ function EditProfileDrawer({ currentUser, setProfileDrawer }) {
         method: "put",
         toastSuccess: true,
         toastError: true,
-        extra: { profileChange: true },
       })
     );
   };
+  useEffect(() => {
+    if (extra?.keyName === "currentUser") {
+      toggleDrawer();
+    }
+  }, [extra]);
   const toggleDrawer = () => setProfileDrawer((val) => !val);
 
   return (

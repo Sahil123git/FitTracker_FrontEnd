@@ -156,10 +156,7 @@ const Dashboard = () => {
           <CardWrapper>
             {todayWorkoutData?.todaysWorkouts?.length > 0 ? (
               todayWorkoutData?.todaysWorkouts.map((excercise) => (
-                <WorkoutCard
-                  workout={excercise}
-                  getTodaysWorkout={getTodaysWorkout}
-                />
+                <WorkoutCard workout={excercise} />
               ))
             ) : (
               <EmptyChild />

@@ -57,7 +57,7 @@ const Details = styled.div`
   align-items: center;
   gap: 6px;
 `;
-const WorkoutCard = ({ workout, getTodaysWorkout }) => {
+const WorkoutCard = ({ workout }) => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const deleteWorkout = async () => {
@@ -110,14 +110,7 @@ const WorkoutCard = ({ workout, getTodaysWorkout }) => {
           {workout?.duration} min
         </Details>
       </Flex>
-      {open && (
-        <EditModal
-          open={open}
-          setOpen={setOpen}
-          workout={workout}
-          getTodaysWorkout={getTodaysWorkout}
-        />
-      )}
+      {open && <EditModal open={open} setOpen={setOpen} workout={workout} />}
     </Card>
   );
 };

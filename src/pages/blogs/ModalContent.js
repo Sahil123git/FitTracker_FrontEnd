@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -17,6 +17,7 @@ import { fetchData } from "../../redux/reducers/userSlice";
 import { blogApi } from "../../apiPath";
 const ModalContent = ({ open, setOpen }) => {
   const dispatch = useDispatch();
+  const [reaction, setReaction] = useState({ likes: false, dislikes: false });
   const { blogData } = useSelector((state) => state.user);
   const getParticularBlog = () => {
     dispatch(
@@ -30,12 +31,42 @@ const ModalContent = ({ open, setOpen }) => {
     );
   };
   useEffect(() => {
+    if (blogData) {
+      setReaction({
+        likes: blogData.data?.userLike,
+        dislikes: blogData.data?.userDislike,
+      });
+    }
+  }, [blogData]);
+  console.log({ blogData });
+  useEffect(() => {
     if (open) getParticularBlog();
   }, [open]);
   const handleClose = () => {
     setOpen(null);
   };
-
+  const userReaction = (type, value) => {
+    console.log(reaction);
+    const data = {
+      ...blogData.data,
+      prevLike: blogData.data?.userLike,
+      prevDislike: blogData.data?.userDislike,
+      userLike: type === "like" ? value : reaction.likes,
+      userDislike: type === "dislike" ? value : reaction.dislikes,
+      blogId: blogData.data._id,
+    };
+    console.log({ data });
+    dispatch(
+      fetchData({
+        keyName: "blogData",
+        url: `${blogApi}/likeDislike`,
+        data,
+        method: "put",
+        toastSuccess: true,
+        toastError: true,
+      })
+    );
+  };
   return (
     <Dialog
       open={open}
@@ -116,17 +147,19 @@ const ModalContent = ({ open, setOpen }) => {
       <DialogActions sx={{ justifyContent: "center", p: 2 }}>
         <Button
           startIcon={<ThumbUpIcon />}
-          variant="outlined"
+          variant={reaction?.likes ? "contained" : "outlined"}
           color="primary"
           aria-label="Like"
+          onClick={() => userReaction("like", !reaction.likes)}
         >
           Like {blogData?.data.likes}
         </Button>
         <Button
           startIcon={<ThumbDownIcon />}
-          variant="outlined"
+          variant={reaction?.likes ? "contained" : "outlined"}
           color="secondary"
           aria-label="Dislike"
+          onClick={() => userReaction("dislike", !reaction.dislikes)}
         >
           Dislike {blogData?.data.dislikes}
         </Button>

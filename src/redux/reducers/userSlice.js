@@ -28,6 +28,7 @@ export const fetchData = createAsyncThunk(
       ) {
         return { data: response.data, keyName, method };
       } else {
+        //this return statement will become payload in fulfilled case
         return {
           data: { keyName, message: response.data.message },
           keyName: "extra",
@@ -66,8 +67,9 @@ export const userSlice = createSlice({
         const { keyName, data, method } = action.payload;
         if (keyName === "currentUser") {
           state.extra = null;
-          if (method === "post") {
-            localStorage.setItem("fittrack-app-token", data.token);
+          if (method === "post" || method === "put") {
+            if (data.token)
+              localStorage.setItem("fittrack-app-token", data.token);
             state.extra = { keyName: "currentUser" };
             toast.success("Success", {
               className: "my-classname",

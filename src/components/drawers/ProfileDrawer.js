@@ -60,7 +60,7 @@ const getBMIFeedback = (bmi) => {
   };
 };
 const ProfileDrawer = ({ toggleDrawer }) => {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, extra } = useSelector((state) => state.user);
   const [resourceOpen, setResourceOpen] = useState(false);
   const [profileDrawer, setProfileDrawer] = useState(false);
   const bmi = getBMI(currentUser.weight, currentUser.height);
@@ -212,6 +212,7 @@ const ProfileDrawer = ({ toggleDrawer }) => {
           <EditProfileDrawer
             currentUser={currentUser}
             setProfileDrawer={setProfileDrawer}
+            extra={extra}
           />
         </Drawer>
       </Box>
