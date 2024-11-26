@@ -38,7 +38,6 @@ const ModalContent = ({ open, setOpen }) => {
       });
     }
   }, [blogData]);
-  console.log({ blogData });
   useEffect(() => {
     if (open) getParticularBlog();
   }, [open]);
@@ -46,7 +45,6 @@ const ModalContent = ({ open, setOpen }) => {
     setOpen(null);
   };
   const userReaction = (type, value) => {
-    console.log(reaction);
     const data = {
       ...blogData.data,
       prevLike: blogData.data?.userLike,
@@ -55,7 +53,6 @@ const ModalContent = ({ open, setOpen }) => {
       userDislike: type === "dislike" ? value : reaction.dislikes,
       blogId: blogData.data._id,
     };
-    console.log({ data });
     dispatch(
       fetchData({
         keyName: "blogData",
@@ -156,7 +153,7 @@ const ModalContent = ({ open, setOpen }) => {
         </Button>
         <Button
           startIcon={<ThumbDownIcon />}
-          variant={reaction?.likes ? "contained" : "outlined"}
+          variant={reaction?.dislikes ? "contained" : "outlined"}
           color="secondary"
           aria-label="Dislike"
           onClick={() => userReaction("dislike", !reaction.dislikes)}

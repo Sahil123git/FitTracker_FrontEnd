@@ -31,6 +31,7 @@ export const fetchData = createAsyncThunk(
         //this return statement will become payload in fulfilled case
         return {
           data: { keyName, message: response.data.message },
+          response: response.data,
           keyName: "extra",
           method,
         };
@@ -64,7 +65,7 @@ export const userSlice = createSlice({
       .addCase(fetchData.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        const { keyName, data, method } = action.payload;
+        const { keyName, data, method, response } = action.payload;
         if (keyName === "currentUser") {
           state.extra = null;
           if (method === "post" || method === "put") {
@@ -83,7 +84,10 @@ export const userSlice = createSlice({
           state.extra = null;
           state[keyName] = data;
         } else {
+          console.log("Reached here after updation: ", action);
           state[keyName] = data;
+          state[data.keyName] = response;
+          // state[]=;
           toast.success("Success", {
             className: "my-classname",
             description: data.message,
