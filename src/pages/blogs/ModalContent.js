@@ -15,7 +15,7 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchData } from "../../redux/reducers/userSlice";
 import { blogApi } from "../../apiPath";
-const ModalContent = ({ open, setOpen }) => {
+const ModalContent = ({ open, setOpen, getBlogData }) => {
   const dispatch = useDispatch();
   const [reaction, setReaction] = useState({ likes: false, dislikes: false });
   const { blogData } = useSelector((state) => state.user);
@@ -43,6 +43,7 @@ const ModalContent = ({ open, setOpen }) => {
   }, [open]);
   const handleClose = () => {
     setOpen(null);
+    getBlogData();
   };
   const userReaction = (type, value) => {
     const data = {

@@ -38,7 +38,6 @@ export const fetchData = createAsyncThunk(
       }
     } catch (err) {
       console.log({ axios: err });
-      // throw err.response;
       return rejectWithValue(err.response.data);
     }
   }
@@ -84,7 +83,6 @@ export const userSlice = createSlice({
           state.extra = null;
           state[keyName] = data;
         } else {
-          console.log("Reached here after updation: ", action);
           state[keyName] = data;
           state[data.keyName] = response;
           // state[]=;
@@ -96,7 +94,6 @@ export const userSlice = createSlice({
         }
       })
       .addCase(fetchData.rejected, (state, action) => {
-        console.log({ action });
         toast.error("Error", {
           className: "my-classname",
           description: action.payload.message,

@@ -10,7 +10,7 @@ const Blogs = () => {
   const { blogsData } = useSelector((state) => state.user);
   const [open, setOpen] = useState(null);
   const [loading, setLoading] = useState(false);
-  const getTodaysWorkout = async () => {
+  const getBlogData = async () => {
     setLoading(true);
     dispatch(
       fetchData({
@@ -25,8 +25,9 @@ const Blogs = () => {
   };
   const openModal = (id) => setOpen(id);
   useEffect(() => {
-    if (blogsData === null) getTodaysWorkout();
+    if (blogsData === null) getBlogData();
   }, []);
+
   return (
     <Box
       sx={{
@@ -53,7 +54,7 @@ const Blogs = () => {
           ))}
       </Box>
 
-      <ModalContent open={open} setOpen={setOpen} />
+      <ModalContent open={open} setOpen={setOpen} getBlogData={getBlogData}/>
     </Box>
   );
 };
