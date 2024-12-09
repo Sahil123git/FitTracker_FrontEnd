@@ -123,7 +123,10 @@ const ProfileDrawer = ({ toggleDrawer }) => {
             {currentUser.name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Fitness Goal: {currentUser.fitnessGoal}
+            Fitness Goal:{" "}
+            {currentUser.fitnessGoal === "weightGain"
+              ? "Weight Gain"
+              : "Weight Loss"}
           </Typography>
         </Box>
         <Divider sx={{ mb: 1 }} />

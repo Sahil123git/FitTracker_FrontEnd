@@ -6,10 +6,9 @@ import { DateCalendar } from "@mui/x-date-pickers";
 import { CircularProgress } from "@mui/material";
 import styled from "styled-components";
 import dayjs from "dayjs";
-import { fetchData, updateStoreData } from "../redux/reducers/userSlice";
+import { fetchData } from "../redux/reducers/userSlice";
 import WorkoutCard from "../components/cards/WorkoutCard";
 import { EmptyChild } from "../assets/icons";
-import { getWorkouts } from "../api";
 import { todayWorkoutApi } from "../apiPath";
 
 const Container = styled.div`

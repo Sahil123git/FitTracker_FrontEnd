@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Box from "@mui/material/Box";
 import { blogApi } from "../../apiPath";
 import { fetchData } from "../../redux/reducers/userSlice";
-import { Box } from "@mui/material";
 import ModalContent from "./ModalContent";
+import BlogHeader from "./BlogHeader";
 import BlogCard from "./BlogCard";
 const Blogs = () => {
   const dispatch = useDispatch();
@@ -48,13 +49,14 @@ const Blogs = () => {
           overflow: "auto",
         }}
       >
+        <BlogHeader />
         {blogsData?.data.length > 0 &&
           blogsData?.data?.map((blog) => (
             <BlogCard key={blog._id} blog={blog} openModal={openModal} />
           ))}
       </Box>
 
-      <ModalContent open={open} setOpen={setOpen} getBlogData={getBlogData}/>
+      <ModalContent open={open} setOpen={setOpen} getBlogData={getBlogData} />
     </Box>
   );
 };
