@@ -25,7 +25,8 @@ function EditProfileDrawer({ currentUser, setProfileDrawer, extra }) {
     age: currentUser.age,
     gender: currentUser.gender,
     weight: currentUser.weight,
-    height: currentUser.height,
+    heightFeet: currentUser.height.heightFeet,
+    heightInch: currentUser.height.heightInch,
     fitnessGoal: currentUser.fitnessGoal,
   });
 
@@ -39,6 +40,11 @@ function EditProfileDrawer({ currentUser, setProfileDrawer, extra }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    formData.height = {
+      heightFeet: formData.heightFeet,
+      heightInch: formData.heightInch,
+    };
+
     dispatch(
       fetchData({
         keyName: "currentUser",
@@ -116,7 +122,7 @@ function EditProfileDrawer({ currentUser, setProfileDrawer, extra }) {
           </FormControl>
           <TextField
             fullWidth
-            label="Weight"
+            label="Weights"
             name="weight"
             type="number"
             value={formData.weight}
@@ -128,20 +134,43 @@ function EditProfileDrawer({ currentUser, setProfileDrawer, extra }) {
               endAdornment: <InputAdornment position="end">kg</InputAdornment>,
             }}
           />
-          <TextField
-            fullWidth
-            label="Height"
-            name="height"
-            type="number"
-            value={formData.height}
-            onChange={handleChange}
-            margin="normal"
-            variant="outlined"
-            inputProps={{ min: 0, step: 0.1 }}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">ft</InputAdornment>,
-            }}
-          />
+
+          <Box display="flex" gap={2} alignItems="center">
+            {/* TextField for Feet */}
+            <TextField
+              label="Feets"
+              name="heightFeet"
+              type="number"
+              value={formData.heightFeet}
+              onChange={handleChange}
+              margin="normal"
+              variant="outlined"
+              inputProps={{ min: 0, step: 1 }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">ft</InputAdornment>
+                ),
+              }}
+            />
+
+            {/* TextField for Inches */}
+            <TextField
+              label="Inches"
+              name="heightInch"
+              type="number"
+              value={formData.heightInch}
+              onChange={handleChange}
+              margin="normal"
+              variant="outlined"
+              inputProps={{ min: 0, max: 11, step: 1 }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">in</InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+
           <FormControl fullWidth margin="normal">
             <InputLabel>Fitness Goal</InputLabel>
             <Select

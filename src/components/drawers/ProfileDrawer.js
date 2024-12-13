@@ -25,8 +25,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import UploadDrawer from "./UploadDrawer";
 import EditProfileDrawer from "./EditProfileDrawer";
 
-const getBMI = (weight, height) => {
-  const heightInMeters = height * 0.3048; //conversion to meter
+const getBMI = (weight, heightFeet, heightInch) => {
+  const heightInMeters = heightFeet * 0.3048 + heightInch * 0.0254; //conversion to meter
   const bmi = weight / heightInMeters ** 2;
   return bmi;
 };
@@ -63,7 +63,11 @@ const ProfileDrawer = ({ toggleDrawer }) => {
   const { currentUser, extra } = useSelector((state) => state.user);
   const [resourceOpen, setResourceOpen] = useState(false);
   const [profileDrawer, setProfileDrawer] = useState(false);
-  const bmi = getBMI(currentUser.weight, currentUser.height);
+  const bmi = getBMI(
+    currentUser.weight,
+    currentUser.height.heightFeet,
+    currentUser.height.heightInch
+  );
   const { message, goal, type } = getBMIFeedback(bmi);
 
   return (
@@ -176,7 +180,7 @@ const ProfileDrawer = ({ toggleDrawer }) => {
               </ListItemIcon>
               <ListItemText
                 primary="Height"
-                secondary={`${currentUser.height} feet`}
+                secondary={`${currentUser.height.heightFeet} feet ${currentUser.height.heightInch} inches`}
               />
             </ListItem>
 
