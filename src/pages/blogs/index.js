@@ -17,29 +17,18 @@ const Blogs = () => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  const getBlogData = async (isNextPage = false) => {
-    // if (loading || (isNextPage && !hasMore)) {
-    //   console.log("reached here");
-    //   return;
-    // } // Prevent multiple calls
-    setLoading(true);
-
-    dispatch(
-      fetchData({
-        keyName: "blogsData",
-        url: `${blogApi}?page=${page}&limit=${limit}`,
-        method: "get",
-        toastSuccess: false,
-        toastError: true,
-      })
-    );
-
-    if (blogsData?.currentPage * limit >= blogsData?.totalPages) {
-      setHasMore(false); // No more data to load
+  const getBlogData = () => {
+    if (hasMore) {
+      dispatch(
+        fetchData({
+          keyName: "blogsData",
+          url: `${blogApi}?page=${page}&limit=${limit}`,
+          method: "get",
+          toastSuccess: false,
+          toastError: true,
+        })
+      );
     }
-
-    if (isNextPage) setPage((prevPage) => prevPage + 1); // Increment page if it's next page request
-    setLoading(false);
   };
 
   const handleScroll = () => {
@@ -56,11 +45,20 @@ const Blogs = () => {
   useEffect(() => {
     if (blogsData === null) getBlogData();
   }, []);
-
+  console.log({ hasMore });
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll); // Cleanup listener on unmount
-  }, [blogsData, hasMore]);
+    console.log(blogsData?.currentPage, blogsData?.totalPages);
+    if (blogsData && blogsData?.currentPage === blogsData?.totalPages) {
+      setHasMore(false);
+    }
+    if (blogsData) {
+      setPage(blogsData.currentPage + 1);
+    }
+  }, [blogsData]);
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, true);
+    return () => window.removeEventListener("scroll", handleScroll, true); // Cleanup listener on unmount
+  }, [blogsData]);
 
   return (
     <Box
