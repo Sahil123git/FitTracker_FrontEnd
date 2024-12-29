@@ -79,6 +79,16 @@ export const userSlice = createSlice({
           } else {
             state[keyName] = data.data;
           }
+        } else if (keyName === "blogsData") {
+          console.log("Keyname: ", state[keyName]);
+          if (state[keyName] === null) {
+            state[keyName] = data;
+          } else {
+            state[keyName] = {
+              ...data, // Preserve other properties
+              data: [...state[keyName].data, ...data.data], // Combine previous and new blog entries
+            };
+          }
         } else if (method === "get") {
           state.extra = null;
           state[keyName] = data;
