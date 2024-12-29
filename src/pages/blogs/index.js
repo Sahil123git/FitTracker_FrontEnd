@@ -7,6 +7,7 @@ import { updateStoreData } from "../../redux/reducers/userSlice";
 import ModalContent from "./ModalContent";
 import BlogHeader from "./BlogHeader";
 import BlogCard from "./BlogCard";
+import useDebouncedValue from "../../hooks/useDebounce";
 
 const LIMIT = 3;
 
@@ -17,8 +18,38 @@ const Blogs = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const modifyData = (response) => {
-    if (blogsData === null) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterMostLiked, setFilterMostLiked] = useState(false);
+  const debouncedQuery = useDebouncedValue(searchQuery, 1000);
+
+  useEffect(() => {
+    if (!isFetching) {
+      return;
+    }
+    if (blogsData !== null) {
+      getBlogData(page);
+    }
+  }, [isFetching]);
+
+  useEffect(() => {
+    if (blogsData === null && loading === false) {
+      getBlogData(1);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, true);
+    return () => window.removeEventListener("scroll", handleScroll, true); // Cleanup listener on unmount
+  }, [blogsData, page, hasMore]);
+
+  useEffect(() => {
+    if (debouncedQuery && blogsData !== null) {
+      getBlogData(1, true);
+      setHasMore(true);
+    }
+  }, [debouncedQuery, filterMostLiked]);
+  const modifyData = (response, queryChange) => {
+    if (blogsData === null || queryChange) {
       setPage(2);
       dispatch(updateStoreData({ payload: response.data, meta: "blogsData" }));
     } else {
@@ -33,18 +64,17 @@ const Blogs = () => {
       dispatch(updateStoreData({ payload: response.data, meta: "blogsData" }));
     }
   };
-  const getBlogData = async (pageGet) => {
-    if (hasMore) {
+  const getBlogData = async (pageGet, queryChange = false) => {
+    if (hasMore || queryChange) {
       const token = localStorage.getItem("fittrack-app-token");
       axios.defaults.headers.common["Authorization"] = token;
-      const url = `${blogApi}?page=${pageGet}&limit=${LIMIT}`;
+      const url = `${blogApi}?page=${pageGet}&limit=${LIMIT}&query=${searchQuery}&sort=${filterMostLiked}`;
       dispatch(updateStoreData({ payload: true, meta: "loading" }));
       const response = await axios.get(`${apiPath}/${url}`);
       dispatch(updateStoreData({ payload: false, meta: "loading" }));
-      modifyData(response);
+      modifyData(response, queryChange);
     }
   };
-  console.log({ loading });
   const handleScroll = () => {
     const scrollContainer = document.querySelector(".blogContainer");
     if (
@@ -53,32 +83,10 @@ const Blogs = () => {
       hasMore &&
       loading === false
     ) {
-      console.log({ inside: page, blogsData });
       setIsFetching(true);
     }
   };
-
-  useEffect(() => {
-    if (!isFetching) {
-      return;
-    }
-    if (blogsData !== null) {
-      getBlogData(page);
-    }
-  }, [isFetching]);
-
   const openModal = (id) => setOpen(id);
-
-  useEffect(() => {
-    if (blogsData === null && loading === false) {
-      getBlogData(1);
-    }
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll, true);
-    return () => window.removeEventListener("scroll", handleScroll, true); // Cleanup listener on unmount
-  }, [blogsData, page, hasMore]);
 
   return (
     <Box
@@ -101,7 +109,10 @@ const Blogs = () => {
           overflow: "auto",
         }}
       >
-        <BlogHeader />
+        <BlogHeader
+          setSearchQuery={setSearchQuery}
+          setFilterMostLiked={setFilterMostLiked}
+        />
         {blogsData &&
           blogsData?.data.length > 0 &&
           blogsData?.data?.map((blog) => (
