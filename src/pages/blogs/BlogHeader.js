@@ -14,7 +14,7 @@ const BlogHeader = ({ setSearchQuery, setFilterMostLiked }) => {
         <TextField
           variant="outlined"
           placeholder="Search blogs..."
-          onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
+          onChange={(e) => setSearchQuery(e.target.value.toLowerCase().trim())}
           fullWidth
           InputProps={{
             startAdornment: (

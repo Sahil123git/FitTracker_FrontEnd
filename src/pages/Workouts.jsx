@@ -72,7 +72,7 @@ const Section = styled.div`
 const SecTitle = styled.div`
   font-size: 22px;
   color: ${({ theme }) => theme.text_primary};
-  font-weight: 500;
+  font-weight: 500;\
 `;
 
 const Workouts = () => {

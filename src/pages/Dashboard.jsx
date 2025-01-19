@@ -154,8 +154,8 @@ const Dashboard = () => {
           <Title>Todays Workouts</Title>
           <CardWrapper>
             {todayWorkoutData?.todaysWorkouts?.length > 0 ? (
-              todayWorkoutData?.todaysWorkouts.map((excercise) => (
-                <WorkoutCard workout={excercise} />
+              todayWorkoutData?.todaysWorkouts.map((exercise) => (
+                <WorkoutCard workout={exercise} />
               ))
             ) : (
               <EmptyChild />

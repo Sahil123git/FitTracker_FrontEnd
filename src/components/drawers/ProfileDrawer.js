@@ -22,8 +22,10 @@ import WcIcon from "@mui/icons-material/Wc";
 import IconButton from "@mui/material/IconButton";
 import ClearIcon from "@mui/icons-material/Clear";
 import EditIcon from "@mui/icons-material/Edit";
+import HelpIcon from "@mui/icons-material/Help";
 import UploadDrawer from "./UploadDrawer";
 import EditProfileDrawer from "./EditProfileDrawer";
+import BmiModal from "../modals/BmiModal";
 
 const getBMI = (weight, heightFeet, heightInch) => {
   const heightInMeters = heightFeet * 0.3048 + heightInch * 0.0254; //conversion to meter
@@ -59,15 +61,20 @@ const getBMIFeedback = (bmi) => {
     type: "error",
   };
 };
+
 const ProfileDrawer = ({ toggleDrawer }) => {
   const { currentUser, extra } = useSelector((state) => state.user);
   const [resourceOpen, setResourceOpen] = useState(false);
   const [profileDrawer, setProfileDrawer] = useState(false);
+  const [bmiModal, setBmiModal] = useState(false);
   const bmi = getBMI(
     currentUser.weight,
     currentUser.height.heightFeet,
     currentUser.height.heightInch
   );
+  const openModal = () => {
+    setBmiModal(true);
+  };
   const { message, goal, type } = getBMIFeedback(bmi);
 
   return (
@@ -189,6 +196,27 @@ const ProfileDrawer = ({ toggleDrawer }) => {
                 <FitnessCenterIcon color="primary" />
               </ListItemIcon>
               <ListItemText primary="BMI" secondary={bmi.toFixed(1)} />
+              <IconButton
+                aria-label="edit"
+                size="small"
+                onClick={() => openModal(true)}
+                sx={{
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    top: "-2px",
+                    left: "-2px",
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: "50%",
+                    border: "2px dashed #1976d2",
+                    animation: "rotate 5s linear infinite",
+                    zIndex: -1,
+                  },
+                }}
+              >
+                <HelpIcon fontSize="5px" color="primary" />
+              </IconButton>
             </ListItem>
           </List>
         </Box>
@@ -204,6 +232,7 @@ const ProfileDrawer = ({ toggleDrawer }) => {
             {goal}
           </Typography>
         </Box>
+        <BmiModal setBmiModal={setBmiModal} bmiModal={bmiModal} />
         <Drawer
           anchor="right"
           open={resourceOpen}

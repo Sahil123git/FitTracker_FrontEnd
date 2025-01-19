@@ -52,15 +52,15 @@ const AddWorkout = ({
       <InputField
         sx={{ marginBottom: "10px" }}
         id="outlined-basic"
-        label="Excercise"
+        label="Exercise"
         variant="outlined"
-        placeholder="Enter Excercise"
+        placeholder="Enter Exercise"
         value={workout?.workoutName ?? ""}
         onChange={(e) => handleChange("workoutName", e.target.value)}
       />
       <Box sx={{ display: "flex", marginBottom: "10px" }}>
         <InputField
-          label="Excercise Sets"
+          label="Exercise Sets"
           placeholder="Enter sets"
           type="number"
           variant="outlined"
@@ -69,7 +69,7 @@ const AddWorkout = ({
           onChange={(e) => handleChange("sets", e.target.value)}
         />
         <InputField
-          label="Excercise reps"
+          label="Exercise reps"
           placeholder="Enter reps"
           type="number"
           variant="outlined"

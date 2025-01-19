@@ -43,7 +43,7 @@ const Blogs = () => {
   }, [blogsData, page, hasMore]);
 
   useEffect(() => {
-    if (debouncedQuery && blogsData !== null) {
+    if (blogsData !== null) {
       getBlogData(1, true);
       setHasMore(true);
     }
@@ -51,6 +51,9 @@ const Blogs = () => {
   const modifyData = (response, queryChange) => {
     if (blogsData === null || queryChange) {
       setPage(2);
+      if (response.data.currentPage === response.data.totalPages)
+        setHasMore(false);
+
       dispatch(updateStoreData({ payload: response.data, meta: "blogsData" }));
     } else {
       if (response.data.currentPage < response.data.totalPages) {
